@@ -6,7 +6,7 @@ const Jumbotron = require('react-bootstrap/lib/Jumbotron');
 const FormGroup = require('react-bootstrap/lib/FormGroup');
 const Input = require('react-bootstrap/lib/Input');
 
-const Todo = require('./Todo.jsx');
+const TodoCollection = require('./TodoCollection.jsx');
 
 let App = React.createClass({
 
@@ -48,7 +48,7 @@ let App = React.createClass({
           </div>
         </form>
 
-        {todos.map(todo => <Todo todo={todo} onRemove={this.removeTodo} />)}
+        <TodoCollection todos={todos} onRemove={this.removeTodo} />
       </div>
     );
   }
