@@ -7,20 +7,19 @@ const FormGroup = require('react-bootstrap/lib/FormGroup');
 const Input = require('react-bootstrap/lib/Input');
 
 const TodoCollection = require('./TodoCollection.jsx');
+const TodoInput = require('./TodoInput.jsx');
 
 let App = React.createClass({
 
   getInitialState() {
     return {
-      todos: [],
-      input: ''
+      todos: []
     }
   },
 
-  addTodo() {
+  addTodo(text) {
     this.setState({
-      todos: [{text: this.state.input}].concat(this.state.todos),
-      input: ''
+      todos: [{text: text}].concat(this.state.todos)
     });
   },
 
@@ -37,16 +36,8 @@ let App = React.createClass({
     return (
       <div className="container">
         <h2>My Todos</h2>
-        <form role="form">
-          <div className="row">
-            <div className="input-group">
-              <input type="text" className="form-control" value={this.state.input} onChange={this.changeInput} />
-              <span className="input-group-btn">
-                <Button type="button" className="btn-primary" onClick={this.addTodo}>Add</Button>
-              </span>
-            </div>
-          </div>
-        </form>
+
+        <TodoInput onAdd={this.addTodo} />
 
         <TodoCollection todos={todos} onRemove={this.removeTodo} />
       </div>
