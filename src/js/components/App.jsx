@@ -3,55 +3,57 @@ const TodoStore = require('../stores/TodoStore');
 const ActionCreator = require('../actions/TodoActionCreators');
 const Button = require('react-bootstrap/lib/Button');
 const Jumbotron = require('react-bootstrap/lib/Jumbotron');
-const TaskList = require('./TaskList.jsx');
+const FormGroup = require('react-bootstrap/lib/FormGroup');
+const Input = require('react-bootstrap/lib/Input');
 
 let App = React.createClass({
 
   getInitialState() {
     return {
-      tasks: []
+      todos: [],
+      input: ''
     }
   },
 
-  _onChange() {
-    this.setState(TodoStore.getAll());
+  addTodo() {
+    this.setState({
+      todos: [{text: this.state.input}].concat(this.state.todos),
+      input: ''
+    });
   },
 
-  componentDidMount() {
-    TodoStore.addChangeListener(this._onChange);
+  removeTodo(todo) {
+    this.setState({todos: this.state.todos.filter(task => task !== todo)});
   },
 
-  componentWillUnmount() {
-    TodoStore.removeChangeListener(this._onChange);
-  },
-
-  handleAddNewClick(e) {
-    let title = prompt('Enter task title:');
-    if (title) {
-      ActionCreator.addItem(title);
-    }
-  },
-
-  handleClearListClick(e) {
-    ActionCreator.clearList();
+  changeInput(e) {
+    this.setState({input: e.target.value});
   },
 
   render() {
-    let {tasks} = this.state;
+    let {todos} = this.state;
     return (
       <div className="container">
-        <Jumbotron>
-          <h1>Learning Flux</h1>
-          <p>
-            Below is a list of tasks you can implement to better grasp the patterns behind Flux.<br />
-            Most features are left unimplemented with clues to guide you on the learning process.
-          </p>
-        </Jumbotron>
+        <h2>My Todos</h2>
+        <form role="form">
+          <div className="row">
+            <div className="input-group">
+              <input type="text" className="form-control" value={this.state.input} onChange={this.changeInput} />
+              <span className="input-group-btn">
+                <Button type="button" className="btn-primary" onClick={this.addTodo}>Add</Button>
+              </span>
+            </div>
+          </div>
+        </form>
 
-        <TaskList tasks={tasks} />
-
-        <Button onClick={this.handleAddNewClick} bsStyle="primary">Add New</Button>
-        <Button onClick={this.handleClearListClick} bsStyle="danger">Clear List</Button>
+        {todos.map(todo =>
+          <div className="input-group">
+            <Input type="text" value={todo.text} />
+            <span className="input-group-btn">
+              <Button type="text" className="btn-danger" aria-label="Remove" onClick={this.removeTodo.bind(this, todo)}>X</Button>
+            </span>
+          </div>
+        )}
       </div>
     );
   }
