@@ -6,6 +6,8 @@ const Jumbotron = require('react-bootstrap/lib/Jumbotron');
 const FormGroup = require('react-bootstrap/lib/FormGroup');
 const Input = require('react-bootstrap/lib/Input');
 
+const Todo = require('./Todo.jsx');
+
 let App = React.createClass({
 
   getInitialState() {
@@ -46,14 +48,7 @@ let App = React.createClass({
           </div>
         </form>
 
-        {todos.map(todo =>
-          <div className="input-group">
-            <Input type="text" value={todo.text} />
-            <span className="input-group-btn">
-              <Button type="text" className="btn-danger" aria-label="Remove" onClick={this.removeTodo.bind(this, todo)}>X</Button>
-            </span>
-          </div>
-        )}
+        {todos.map(todo => <Todo todo={todo} onRemove={this.removeTodo} />)}
       </div>
     );
   }
